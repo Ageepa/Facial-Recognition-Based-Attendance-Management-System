@@ -21,7 +21,7 @@ if(isset($_POST['save'])){
 
     if($ret > 0){ 
 
-        $statusMsg = "<div class='alert alert-danger' style='margin-right:700px; id='statusMsg'>This Email Address Already Exists!</div>";
+        $statusMsg = "<div class='alert alert-danger' style='margin-right:700px; id='statusMsg'>This Admission NO Already Exists!</div>";
         echo "<script>
         setTimeout(function() {
             var msg = document.getElementById('statusMsg');
@@ -34,8 +34,8 @@ if(isset($_POST['save'])){
       }
     else{
 
-    $query=mysqli_query($conn,"insert into tblstudents(firstName,lastName,otherName,admissionNumber,password,classId,classArmId,dateCreated) 
-    value('$firstName','$lastName','$otherName','$admissionNumber','12345','$classId','$classArmId','$dateCreated')");
+    $query=mysqli_query($conn,"insert into tblstudents(firstName,lastName,otherName,admissionNumber,classId,classArmId,dateCreated) 
+    value('$firstName','$lastName','$otherName','$admissionNumber','$classId','$classArmId','$dateCreated')");
 
     if ($query) {
         
@@ -64,12 +64,6 @@ if(isset($_POST['save'])){
   }
 }
 
-//---------------------------------------EDIT-------------------------------------------------------------
-
-
-
-
-
 
 //--------------------EDIT------------------------------------------------------------
 
@@ -94,7 +88,7 @@ if(isset($_POST['save'])){
           $dateCreated = date("Y-m-d");
 
  $query=mysqli_query($conn,"update tblstudents set firstName='$firstName', lastName='$lastName',
-    otherName='$otherName', admissionNumber='$admissionNumber',password='12345', classId='$classId',classArmId='$classArmId'
+    otherName='$otherName', admissionNumber='$admissionNumber',classId='$classId',classArmId='$classArmId'
     where Id='$Id'");
             if ($query) {
                 
@@ -371,19 +365,6 @@ if(isset($_POST['save'])){
                                 </div>
                             </div>
                         </div>
-                        <!--Row-->
-
-                        <!-- Documentation Link -->
-                        <!-- <div class="row">
-            <div class="col-lg-12 text-center">
-              <p>For more documentations you can visit<a href="https://getbootstrap.com/docs/4.3/components/forms/"
-                  target="_blank">
-                  bootstrap forms documentations.</a> and <a
-                  href="https://getbootstrap.com/docs/4.3/components/input-group/" target="_blank">bootstrap input
-                  groups documentations</a></p>
-            </div>
-          </div> -->
-
                     </div>
                     <!---Container Fluid-->
                 </div>
