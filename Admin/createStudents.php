@@ -23,13 +23,13 @@ if(isset($_POST['save'])){
 
         $statusMsg = "<div class='alert alert-danger' style='margin-right:700px; id='statusMsg'>This Admission NO Already Exists!</div>";
         echo "<script>
-        setTimeout(function() {
-            var msg = document.getElementById('statusMsg');
-            if (msg) {
-                msg.style.display = 'none';
-            }
-        }, 3000);
-      </script>";
+                setTimeout(function() {
+                    var msg = document.getElementById('statusMsg');
+                    if (msg) {
+                        msg.style.display = 'none';
+                    }
+                }, 3000);
+              </script>";
     
       }
     else{
