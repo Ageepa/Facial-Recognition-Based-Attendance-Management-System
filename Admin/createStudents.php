@@ -34,8 +34,8 @@ if (isset($_POST['save'])) {
     
     else {
         // Save images to the server
-        $imagePath1 = saveImage($studentImage1, 'student_images');
-        $imagePath2 = saveImage($studentImage2, 'student_images');
+        $imagePath1 = saveImage($studentImage1, $admissionNumber . '_1');
+        $imagePath2 = saveImage($studentImage2, $admissionNumber . '_2');
 
         if ($imagePath1 && $imagePath2) {
             // Insert data into the database
@@ -82,7 +82,7 @@ if (isset($_POST['save'])) {
 }
 
 // Function to save base64 image to server
-function saveImage($base64String, $folder) {
+function saveImage($base64String, $admissionNumber) {
     if (!empty($base64String)) {
         // Extract the base64 string and the file extension
         list($type, $data) = explode(';', $base64String);
@@ -90,13 +90,14 @@ function saveImage($base64String, $folder) {
         $extension = str_replace('data:image/', '', $type);
 
         // Create a unique file name
-        $fileName = uniqid() . '.' . $extension;
+        $fileName = $admissionNumber . '.' . $extension;
+        return $fileName;
 
         // Define the file path
-        $filePath = $folder . '/' . $fileName;
+        //$filePath = $folder . '/' . $fileName;
 
         // Create the folder if it doesn't exist
-        if (!is_dir($folder)) {
+        /*if (!is_dir($folder)) {
             mkdir($folder, 0777, true);
         }
 
@@ -105,7 +106,7 @@ function saveImage($base64String, $folder) {
             return $filePath; // Return the file path
         } else {
             return false; // Return false if saving failed
-        }
+        }*/
     }
     return false;
 }
