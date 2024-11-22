@@ -54,6 +54,7 @@ if(isset($_POST['save'])){
                 }, 3000);
               </script>";
               }
+              
             else
             {
                 $statusMsg = "<div class='alert alert-danger' style='margin-right:700px;' id='errorMsg'>An error Occurred!</div>";

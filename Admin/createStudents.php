@@ -5,64 +5,111 @@ include '../Includes/session.php';
 
 //------------------------SAVE--------------------------------------------------
 
-if(isset($_POST['save'])){
-    
-    $firstName=$_POST['firstName'];
-  $lastName=$_POST['lastName'];
-  $otherName=$_POST['otherName'];
+if (isset($_POST['save'])) {
+    $firstName = $_POST['firstName'];
+    $lastName = $_POST['lastName'];
+    $otherName = $_POST['otherName'];
+    $admissionNumber = $_POST['admissionNumber'];
+    $classId = $_POST['classId'];
+    $classArmId = $_POST['classArmId'];
+    $studentImage1 = $_POST['studentImage1']; // Base64 string
+    $studentImage2 = $_POST['studentImage2']; // Base64 string
+    $dateCreated = date("Y-m-d");
 
-  $admissionNumber=$_POST['admissionNumber'];
-  $classId=$_POST['classId'];
-  $classArmId=$_POST['classArmId'];
-  $dateCreated = date("Y-m-d");
-   
-    $query=mysqli_query($conn,"select * from tblstudents where admissionNumber ='$admissionNumber'");
-    $ret=mysqli_fetch_array($query);
+    // Validate Admission Number
+    $query = mysqli_query($conn, "SELECT * FROM tblstudents WHERE admissionNumber ='$admissionNumber'");
+    $ret = mysqli_fetch_array($query);
 
-    if($ret > 0){ 
-
-        $statusMsg = "<div class='alert alert-danger' style='margin-right:700px; id='statusMsg'>This Admission NO Already Exists!</div>";
+    if ($ret > 0) { 
+        $statusMsg = "<div class='alert alert-danger' style='margin-right:700px;' id='statusMsg'>This Admission NO Already Exists!</div>";
         echo "<script>
-        setTimeout(function() {
-            var msg = document.getElementById('statusMsg');
-            if (msg) {
-                msg.style.display = 'none';
-            }
-        }, 3000);
-      </script>";
+            setTimeout(function() {
+                var msg = document.getElementById('statusMsg');
+                if (msg) {
+                    msg.style.display = 'none';
+                }
+            }, 3000);
+        </script>";
+    } 
     
-      }
-    else{
+    else {
+        // Save images to the server
+        $imagePath1 = saveImage($studentImage1, 'student_images');
+        $imagePath2 = saveImage($studentImage2, 'student_images');
 
-    $query=mysqli_query($conn,"insert into tblstudents(firstName,lastName,otherName,admissionNumber,classId,classArmId,dateCreated) 
-    value('$firstName','$lastName','$otherName','$admissionNumber','$classId','$classArmId','$dateCreated')");
+        if ($imagePath1 && $imagePath2) {
+            // Insert data into the database
+            $query = mysqli_query($conn, "INSERT INTO tblstudents 
+                (firstName, lastName, otherName, admissionNumber, classId, classArmId, studentImage1, studentImage2, dateCreated) 
+                VALUES ('$firstName', '$lastName', '$otherName', '$admissionNumber', '$classId', '$classArmId', '$imagePath1', '$imagePath2', '$dateCreated')");
 
-    if ($query) {
-        
-        $statusMsg = "<div class='alert alert-success'  style='margin-right:700px; id='successMsg'>Created Successfully!</div>";
-        echo "<script>
-        setTimeout(function() {
-            var msg = document.getElementById('successMsg');
-            if (msg) {
-                msg.style.display = 'none';
+            if ($query) {
+                $statusMsg = "<div class='alert alert-success' style='margin-right:700px;' id='successMsg'>Created Successfully!</div>";
+                echo "<script>
+                    setTimeout(function() {
+                        var msg = document.getElementById('successMsg');
+                        if (msg) {
+                            msg.style.display = 'none';
+                        }
+                    }, 3000);
+                </script>";
+            } 
+            
+            else {
+                $statusMsg = "<div class='alert alert-danger' style='margin-right:700px;' id='errorMsg'>An error occurred while saving the student data!</div>";
+                echo "<script>
+                    setTimeout(function() {
+                        var msg = document.getElementById('errorMsg');
+                        if (msg) {
+                            msg.style.display = 'none';
+                        }
+                    }, 3000);
+                </script>";
             }
-        }, 3000);
-      </script>";      
+        } 
+        else {
+            $statusMsg = "<div class='alert alert-danger' style='margin-right:700px;' id='errorMsg'>Failed to save images!</div>";
+            echo "<script>
+                setTimeout(function() {
+                    var msg = document.getElementById('errorMsg');
+                    if (msg) {
+                        msg.style.display = 'none';
+                    }
+                }, 3000);
+            </script>";
+        }
     }
-    else
-    {
-         $statusMsg = "<div class='alert alert-danger' style='margin-right:700px; id='errorMsg'>An error Occurred!</div>";
-         echo "<script>
-        setTimeout(function() {
-            var msg = document.getElementById('errorMsg');
-            if (msg) {
-                msg.style.display = 'none';
-            }
-        }, 3000);
-      </script>";
-    }
-  }
 }
+
+// Function to save base64 image to server
+function saveImage($base64String, $folder) {
+    if (!empty($base64String)) {
+        // Extract the base64 string and the file extension
+        list($type, $data) = explode(';', $base64String);
+        list(, $data) = explode(',', $data);
+        $extension = str_replace('data:image/', '', $type);
+
+        // Create a unique file name
+        $fileName = uniqid() . '.' . $extension;
+
+        // Define the file path
+        $filePath = $folder . '/' . $fileName;
+
+        // Create the folder if it doesn't exist
+        if (!is_dir($folder)) {
+            mkdir($folder, 0777, true);
+        }
+
+        // Save the file to the server
+        if (file_put_contents($filePath, base64_decode($data))) {
+            return $filePath; // Return the file path
+        } else {
+            return false; // Return false if saving failed
+        }
+    }
+    return false;
+}
+
 
 
 //--------------------EDIT------------------------------------------------------------
@@ -98,7 +145,7 @@ if(isset($_POST['save'])){
             }
             else
             {
-                $statusMsg = "<div class='alert alert-danger' style='margin-right:700px; id='statusMsg'>An error Occurred!</div>";
+                $statusMsg = "<div class='alert alert-danger' style='margin-right:700px;' id='statusMsg'>An error Occurred!</div>";
                 echo "<script>
                 setTimeout(function() {
                 var msg = document.getElementById('statusMsg');
@@ -129,7 +176,7 @@ if(isset($_POST['save'])){
         }
         else{
 
-            $statusMsg = "<div class='alert alert-danger' style='margin-right:700px; id='statusMsg'>An error Occurred!</div>"; 
+            $statusMsg = "<div class='alert alert-danger' style='margin-right:700px;' id='statusMsg'>An error Occurred!</div>"; 
             echo "<script>
             setTimeout(function() {
             var msg = document.getElementById('statusMsg');
@@ -235,8 +282,7 @@ if(isset($_POST['save'])){
                                         </div>
                                         <div class="form-group row mb-3">
                                             <div class="col-xl-6">
-                                                <label class="form-control-label">Other Name<span
-                                                        class="text-danger ml-2">*</span></label>
+                                                <label class="form-control-label">Other Name</label>
                                                 <input type="text" class="form-control" name="otherName"
                                                     value="<?php echo $row['otherName'];?>" id="exampleInputFirstName">
                                             </div>
@@ -274,6 +320,29 @@ if(isset($_POST['save'])){
                             ?>
                                             </div>
                                         </div>
+
+<div class="form-group row mb-3">
+    <div class="col-xl-6">
+        <label class="form-control-label">Student Image 1<span class="text-danger ml-2">*</span></label>
+        <div class="image-box" id="imageBox1" onclick="captureImage(1)">
+            <video id="video1" autoplay></video>
+            <canvas id="canvas1" style="display: none;"></canvas>
+        </div>
+        <input type="hidden" name="studentImage1" id="studentImage1">
+    </div>
+    <div class="col-xl-6">
+        <label class="form-control-label">Student Image 2<span class="text-danger ml-2">*</span></label>
+        <div class="image-box" id="imageBox2" onclick="captureImage(2)">
+            <video id="video2" autoplay></video>
+            <canvas id="canvas2" style="display: none;"></canvas>
+        </div>
+        <input type="hidden" name="studentImage2" id="studentImage2">
+    </div>
+</div>
+
+
+
+
                                         <?php
                     if (isset($Id))
                     {
@@ -283,9 +352,10 @@ if(isset($_POST['save'])){
                                         <?php
                     } else {           
                     ?>
-                                        <button type="submit" name="save" class="btn btn-primary">Save</button>
+                                        <button type="submit" name="save"
+                                            class="btn btn-primary">Save</button>&nbsp;&nbsp;
                                         <?php
-                    }         
+}         
                     ?>
                                     </form>
                                 </div>
@@ -379,6 +449,93 @@ if(isset($_POST['save'])){
             <i class="fas fa-angle-up"></i>
         </a>
 
+        <!-- Add some CSS to style the image preview boxes -->
+<style>
+   .image-box {
+    width: 200px;
+    height: 200px;
+    border: 2px dashed #ccc;
+    margin-bottom: 15px;
+    background-color: #f9f9f9;
+    cursor: pointer;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.image-box:hover {
+    border-color: #007bff;
+}
+
+video {
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+    position: absolute;
+    z-index: 10;
+}
+
+canvas {
+    display: none;
+}
+</style>
+
+
+<script>
+    let currentBox = null;
+
+function captureImage(boxNumber) {
+    const video = document.getElementById(`video${boxNumber}`);
+    const canvas = document.getElementById(`canvas${boxNumber}`);
+    const imageBox = document.getElementById(`imageBox${boxNumber}`);
+
+    currentBox = boxNumber;
+
+    // Start the video stream
+    navigator.mediaDevices.getUserMedia({ video: true })
+        .then(stream => {
+            video.style.display = "block";
+            video.srcObject = stream;
+
+            // Wait for the video to be ready
+            video.onloadedmetadata = () => {
+                // Adjust canvas size to match the video
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+
+                // Capture image after 3 seconds
+                setTimeout(() => {
+                    const context = canvas.getContext("2d");
+                    context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+                    const imageData = canvas.toDataURL("image/png");
+
+                    // Set the captured image as the background
+                    imageBox.style.backgroundImage = `url(${imageData})`;
+                    video.style.display = "none";
+
+                    // Stop the webcam
+                    stream.getTracks().forEach(track => track.stop());
+
+                    // Store the image data in the hidden input field
+                    document.getElementById(`studentImage${boxNumber}`).value = imageData;
+                }, 3000);
+            };
+        })
+        .catch(err => {
+            alert("Unable to access webcam.");
+            console.error(err);
+        });
+}
+
+</script>
+
+
+
         <script src="../vendor/jquery/jquery.min.js"></script>
         <script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
         <script src="../vendor/jquery-easing/jquery.easing.min.js"></script>
@@ -394,6 +551,9 @@ if(isset($_POST['save'])){
             $('#dataTableHover').DataTable(); // ID From dataTable with Hover
         });
         </script>
+
+
+
 </body>
 
 </html>
