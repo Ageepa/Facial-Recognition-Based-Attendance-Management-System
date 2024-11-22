@@ -75,7 +75,7 @@ if (isset($_POST['submit'])) {
 
 </head>
 
-<body class="bg-gradient-login">
+<body class="bg-gradient-login" style="background-image: url('img/attendance.png');">
     <!-- Login Content -->
     <div class="container-login">
         <div class="row justify-content-center">

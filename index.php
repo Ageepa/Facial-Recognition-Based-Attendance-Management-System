@@ -203,7 +203,7 @@ if(isset($_POST['login'])){
 
 </head>
 
-<body class="bg-gradient-login" style="background-image: url('img/logo/loral1.jpe00g');">
+<body class="bg-gradient-login" style="background-image: url('img/attendance.png');">
     <!-- Login Content -->
     <div class="container-login">
         <div class="row justify-content-center">
