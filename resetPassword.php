@@ -1,7 +1,61 @@
 <?php 
 include 'Includes/dbcon.php';
 session_start();
+
+if (isset($_POST['submit'])) {
+
+    $emailAddress = $_POST['emailAddress'];
+    $oldPassword = $_POST['oldPassword'];
+    $newPassword = $_POST['newPassword'];
+    $confirmPassword = $_POST['confirmPassword'];
+
+    if ($newPassword == $confirmPassword) {
+        $query = "INSERT INTO tblresetpassword (emailAddress,oldPassword,newPassword,confirmPassword) VALUES('$emailAddress','$oldPassword','$newPassword','$confirmPassword')";
+        $rs = $conn->query($query);
+
+        $_SESSION['userId'] = $Id;
+        $_SESSION['emailAddress'] = $emailAddress;
+        $_SESSION['oldPassword'] = $oldPassword;
+        $_SESSION['newPassword'] = $newPassword;
+        $_SESSION['confirmPassword'] = $confirmPassword;
+
+        echo "<script type = \"text/javascript\">
+        window.location = (\"resetPassword.php\")
+        </script>";
+    }
+    else {
+        echo "<div class='alert alert-danger' role='alert' id='error'>
+        Passwords do not match!
+        </div>";
+        echo "<script type='text/javascript'>
+        setTimeout(function() {
+            document.getElementById('error').style.display='none';
+        }, 5000);
+        </script>";
+    }
+
+    
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ?>
+
+
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -34,28 +88,28 @@ session_start();
                                     <div class="text-center">
                                         <img src="img/logo/attnlg.jpg" style="width:100px;height:100px">
                                         <br><br>
-                                        <h1 class="h4 text-gray-900 mb-4">Forgot Password</h1>
+                                        <h1 class="h4 text-gray-900 mb-4">Reset Password</h1>
                                     </div>
                                     <form class="user" method="Post" action="" id="forgot-password-form">
                                         <div class="form-group">
-                                            <input type="email" class="form-control" required name="email"
+                                            <input type="email" class="form-control" required name="emailAddress"
                                                 id="exampleInputEmail" placeholder="Enter Email Address">
                                             <div class="invalid-feedback" style="display: none;" id="email-error"></div>
                                         </div>
                                         <div class="form-group">
-                                            <input type="password" class="form-control" required name="old_password"
+                                            <input type="password" class="form-control" required name="oldPassword"
                                                 id="exampleInputPassword1" placeholder="Enter Old Password"
                                                 minlength="8">
                                             <div class="invalid-feedback" id="old-password-error"></div>
                                         </div>
                                         <div class="form-group">
-                                            <input type="password" class="form-control" required name="new_password"
+                                            <input type="password" class="form-control" required name="newPassword"
                                                 id="exampleInputPassword2" placeholder="Enter New Password"
                                                 minlength="8">
                                             <div class="invalid-feedback" id="new-password-error"></div>
                                         </div>
                                         <div class="form-group">
-                                            <input type="password" class="form-control" required name="confirm_password"
+                                            <input type="password" class="form-control" required name="confirmPassword"
                                                 id="exampleInputPassword3" placeholder="Confirm New Password"
                                                 minlength="8">
                                             <a href="index.php" style="float:right;" size="10">Back to Login</a>
