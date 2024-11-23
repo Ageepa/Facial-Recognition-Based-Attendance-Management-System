@@ -27,8 +27,8 @@ if (isset($_POST['submit'])) {
                 mysqli_query($conn, $updateClassTeacherQuery);
 
                 // Insert the new password into tblresetpassword
-                $insertResetPasswordQuery = "INSERT INTO tblresetpassword (emailAddress, newPassword, confirmPassword) 
-                                              VALUES ('$email', '$newPasswordHash', '$confirmPasswordHash')";
+                $insertResetPasswordQuery = "INSERT INTO tblresetpassword (emailAddress, oldPassword, newPassword, confirmPassword) 
+                                              VALUES ('$email', '$oldPasswordHash', '$newPasswordHash', '$confirmPasswordHash')";
                 mysqli_query($conn, $insertResetPasswordQuery);
 
                 // Success alert
@@ -150,7 +150,7 @@ if (isset($_POST['submit'])) {
                                             // Remove error message after 3 seconds
                                             setTimeout(() => {
                                                 document.getElementById('email-error').style.display = 'none';
-                                            }, 3000);
+                                            }, 5000);
 
                                             isValid = false;
                                         } else {
@@ -166,7 +166,7 @@ if (isset($_POST['submit'])) {
                                             // Remove error message after 3 seconds
                                             setTimeout(() => {
                                                 document.getElementById('old-password-error').style.display = 'none';
-                                            }, 3000);
+                                            }, 5000);
 
                                             isValid = false;
                                         } else {
@@ -182,7 +182,7 @@ if (isset($_POST['submit'])) {
                                             // Remove error message after 3 seconds
                                             setTimeout(() => {
                                                 document.getElementById('new-password-error').style.display = 'none';
-                                            }, 3000);
+                                            }, 5000);
 
                                             isValid = false;
                                         } else {
@@ -198,7 +198,7 @@ if (isset($_POST['submit'])) {
                                             // Remove error message after 3 seconds
                                             setTimeout(() => {
                                                 document.getElementById('confirm-password-error').style.display = 'none';
-                                            }, 3000);
+                                            }, 5000);
 
                                             isValid = false;
                                         } else {
