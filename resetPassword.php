@@ -3,59 +3,52 @@ include 'Includes/dbcon.php';
 session_start();
 
 if (isset($_POST['submit'])) {
+    // Retrieve data from form
+    $email = mysqli_real_escape_string($conn, $_POST['emailAddress']);
+    $oldPassword = mysqli_real_escape_string($conn, $_POST['oldPassword']);
+    $newPassword = mysqli_real_escape_string($conn, $_POST['newPassword']);
+    $confirmPassword = mysqli_real_escape_string($conn, $_POST['confirmPassword']);
 
-    $emailAddress = $_POST['emailAddress'];
-    $oldPassword = $_POST['oldPassword'];
-    $newPassword = $_POST['newPassword'];
-    $confirmPassword = $_POST['confirmPassword'];
+    // Encrypt passwords using MD5
+    $oldPasswordHash = md5($oldPassword);
+    $newPasswordHash = md5($newPassword);
+    $confirmPasswordHash = md5($confirmPassword);
 
-    if ($newPassword == $confirmPassword) {
-        $query = "INSERT INTO tblresetpassword (emailAddress,oldPassword,newPassword,confirmPassword) VALUES('$emailAddress','$oldPassword','$newPassword','$confirmPassword')";
-        $rs = $conn->query($query);
+    try {
+        // Check if email exists in tblclassteacher
+        $query = "SELECT * FROM tblclassteacher WHERE emailAddress = '$email' AND password = '$oldPasswordHash'";
+        $result = mysqli_query($conn, $query);
 
-        $_SESSION['userId'] = $Id;
-        $_SESSION['emailAddress'] = $emailAddress;
-        $_SESSION['oldPassword'] = $oldPassword;
-        $_SESSION['newPassword'] = $newPassword;
-        $_SESSION['confirmPassword'] = $confirmPassword;
+        if (mysqli_num_rows($result) > 0) {
+            // Check if new password and confirm password match
+            if ($newPassword === $confirmPassword) {
+                // Update the password in tblclassteacher
+                $updateClassTeacherQuery = "UPDATE tblclassteacher SET password = '$newPasswordHash' WHERE emailAddress = '$email'";
+                mysqli_query($conn, $updateClassTeacherQuery);
 
-        echo "<script type = \"text/javascript\">
-        window.location = (\"resetPassword.php\")
-        </script>";
+                // Insert the new password into tblresetpassword
+                $insertResetPasswordQuery = "INSERT INTO tblresetpassword (emailAddress, newPassword, confirmPassword) 
+                                              VALUES ('$email', '$newPasswordHash', '$confirmPasswordHash')";
+                mysqli_query($conn, $insertResetPasswordQuery);
+
+                // Success alert
+                echo "<script>alert('Password Reset Successfully');</script>";
+                echo "<script>window.location.href='index.php';</script>";
+            } else {
+                // Error: Passwords do not match
+                echo "<script>alert('New Password and Confirm Password do not match');</script>";
+            }
+        } else {
+            // Error: Invalid email or old password
+            echo "<script>alert('Invalid Email or Old Password');</script>";
+        }
+    } catch (Exception $e) {
+        // Error handling for any unexpected issues
+        echo "<script>alert('An error occurred: " . $e->getMessage() . "');</script>";
     }
-    else {
-        echo "<div class='alert alert-danger' role='alert' id='error'>
-        Passwords do not match!
-        </div>";
-        echo "<script type='text/javascript'>
-        setTimeout(function() {
-            document.getElementById('error').style.display='none';
-        }, 5000);
-        </script>";
-    }
-
-    
-
-
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 ?>
-
-
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -133,8 +126,7 @@ if (isset($_POST['submit'])) {
                                         let isValid = true;
 
                                         function validateEmail(email) {
-                                            const emailRegex =
-                                                /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+                                            const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
                                             if (!emailRegex.test(email)) {
                                                 return false;
                                             }
@@ -149,55 +141,78 @@ if (isset($_POST['submit'])) {
                                             return true;
                                         }
 
+                                        // Email validation
                                         if (!validateEmail(emailInput.value)) {
                                             emailInput.classList.add('is-invalid');
-                                            document.getElementById('email-error').innerText =
-                                                'Invalid email format';
+                                            document.getElementById('email-error').innerText = 'Invalid email format';
                                             document.getElementById('email-error').style.display = 'block';
+
+                                            // Remove error message after 3 seconds
+                                            setTimeout(() => {
+                                                document.getElementById('email-error').style.display = 'none';
+                                            }, 3000);
+
                                             isValid = false;
                                         } else {
                                             emailInput.classList.remove('is-invalid');
                                             document.getElementById('email-error').style.display = 'none';
                                         }
 
-
+                                        // Old password validation
                                         if (oldPasswordInput.value.length < 6) {
                                             oldPasswordInput.classList.add('is-invalid');
-                                            document.getElementById('old-password-error').innerText =
-                                                'Old password must be at least 6 characters long';
+                                            document.getElementById('old-password-error').innerText = 'Old password must be at least 6 characters long';
+
+                                            // Remove error message after 3 seconds
+                                            setTimeout(() => {
+                                                document.getElementById('old-password-error').style.display = 'none';
+                                            }, 3000);
+
                                             isValid = false;
                                         } else {
                                             oldPasswordInput.classList.remove('is-invalid');
+                                            document.getElementById('old-password-error').style.display = 'none';
                                         }
 
+                                        // New password validation
                                         if (newPasswordInput.value.length < 6) {
                                             newPasswordInput.classList.add('is-invalid');
-                                            document.getElementById('new-password-error').innerText =
-                                                'New password must be at least 6 characters long';
+                                            document.getElementById('new-password-error').innerText = 'New password must be at least 6 characters long';
+
+                                            // Remove error message after 3 seconds
+                                            setTimeout(() => {
+                                                document.getElementById('new-password-error').style.display = 'none';
+                                            }, 3000);
+
                                             isValid = false;
                                         } else {
                                             newPasswordInput.classList.remove('is-invalid');
+                                            document.getElementById('new-password-error').style.display = 'none';
                                         }
 
+                                        // Confirm password validation
                                         if (confirmPasswordInput.value !== newPasswordInput.value) {
                                             confirmPasswordInput.classList.add('is-invalid');
-                                            document.getElementById('confirm-password-error').innerText =
-                                                'New password and confirm password do not match';
+                                            document.getElementById('confirm-password-error').innerText = 'New password and confirm password do not match';
+
+                                            // Remove error message after 3 seconds
+                                            setTimeout(() => {
+                                                document.getElementById('confirm-password-error').style.display = 'none';
+                                            }, 3000);
+
                                             isValid = false;
                                         } else {
                                             confirmPasswordInput.classList.remove('is-invalid');
+                                            document.getElementById('confirm-password-error').style.display = 'none';
                                         }
 
+                                        // Prevent form submission if any validation fails
                                         if (!isValid) {
                                             e.preventDefault();
                                         }
                                     });
+
                                     </script>
-
-                                    <?php
-
-			                    ?>
-
 
                                 </div>
                             </div>
