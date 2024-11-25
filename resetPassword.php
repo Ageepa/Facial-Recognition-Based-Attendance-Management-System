@@ -148,9 +148,9 @@ if (isset($_POST['submit'])) {
                                             document.getElementById('email-error').style.display = 'block';
 
                                             // Remove error message after 3 seconds
-                                            setTimeout(() => {
-                                                document.getElementById('email-error').style.display = 'none';
-                                            }, 5000);
+                                            //setTimeout(() => {
+                                                //document.getElementById('email-error').style.display = 'none';
+                                            //}, 5000);
 
                                             isValid = false;
                                         } else {
@@ -164,9 +164,9 @@ if (isset($_POST['submit'])) {
                                             document.getElementById('old-password-error').innerText = 'Old password must be at least 6 characters long';
 
                                             // Remove error message after 3 seconds
-                                            setTimeout(() => {
-                                                document.getElementById('old-password-error').style.display = 'none';
-                                            }, 5000);
+                                            //setTimeout(() => {
+                                                //document.getElementById('old-password-error').style.display = 'none';
+                                            //}, 5000);
 
                                             isValid = false;
                                         } else {
@@ -180,9 +180,9 @@ if (isset($_POST['submit'])) {
                                             document.getElementById('new-password-error').innerText = 'New password must be at least 6 characters long';
 
                                             // Remove error message after 3 seconds
-                                            setTimeout(() => {
-                                                document.getElementById('new-password-error').style.display = 'none';
-                                            }, 5000);
+                                            //setTimeout(() => {
+                                                //document.getElementById('new-password-error').style.display = 'none';
+                                            //}, 5000);
 
                                             isValid = false;
                                         } else {
@@ -196,9 +196,9 @@ if (isset($_POST['submit'])) {
                                             document.getElementById('confirm-password-error').innerText = 'New password and confirm password do not match';
 
                                             // Remove error message after 3 seconds
-                                            setTimeout(() => {
-                                                document.getElementById('confirm-password-error').style.display = 'none';
-                                            }, 5000);
+                                            //setTimeout(() => {
+                                                //document.getElementById('confirm-password-error').style.display = 'none';
+                                            //}, 5000);
 
                                             isValid = false;
                                         } else {
