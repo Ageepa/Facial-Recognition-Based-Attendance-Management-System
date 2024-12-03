@@ -139,23 +139,33 @@ function saveImage($base64String, $admissionNumber) {
     otherName='$otherName', admissionNumber='$admissionNumber',classId='$classId',classArmId='$classArmId'
     where Id='$Id'");
             if ($query) {
-                
-                echo "<script type = \"text/javascript\">
-                window.location = (\"createStudents.php\")
-                </script>"; 
+
+                $statusMsg = "<div class='alert alert-success' style='margin-right:700px;' id='successMsg'>Updated Successfully!</div>";
+                echo "<script> 
+                    setTimeout(function() {
+                        var msg = document.getElementById('successMsg');
+                        if (msg) {
+                            msg.style.display = 'none';
+                        }
+                        window.location = (\"createStudents.php\")
+                    }, 3000);
+                </script>";
+
             }
+
             else
             {
                 $statusMsg = "<div class='alert alert-danger' style='margin-right:700px;' id='statusMsg'>An error Occurred!</div>";
                 echo "<script>
-                setTimeout(function() {
-                var msg = document.getElementById('statusMsg');
-                if (msg) {
-                msg.style.display = 'none';
-                }
-              }, 3000);
-              </script>";
+                    setTimeout(function() {
+                        var msg = document.getElementById('statusMsg');
+                        if (msg) {
+                            msg.style.display = 'none';
+                        }
+                    }, 3000);
+                </script>";
             }
+
         }
     }
 
@@ -171,10 +181,18 @@ function saveImage($base64String, $admissionNumber) {
 
         if ($query == TRUE) {
 
-            echo "<script type = \"text/javascript\">
-            window.location = (\"createStudents.php\")
+            $statusMsg = "<div class='alert alert-success' style='margin-right:700px;' id='successMsg'>Deleted Successfully!</div>";
+            echo "<script> 
+                setTimeout(function() {
+                    var msg = document.getElementById('successMsg');
+                    if (msg) {
+                        msg.style.display = 'none';
+                    }
+                    window.location = (\"createStudents.php\")
+                }, 3000);
             </script>";
         }
+
         else{
 
             $statusMsg = "<div class='alert alert-danger' style='margin-right:700px;' id='statusMsg'>An error Occurred!</div>"; 
@@ -322,27 +340,24 @@ function saveImage($base64String, $admissionNumber) {
                                             </div>
                                         </div>
 
-<div class="form-group row mb-3">
-    <div class="col-xl-6">
-        <label class="form-control-label">Student Image 1<span class="text-danger ml-2">*</span></label>
-        <div class="image-box" id="imageBox1" onclick="captureImage(1)">
-            <video id="video1" autoplay></video>
-            <canvas id="canvas1" style="display: none;"></canvas>
-        </div>
-        <input type="hidden" name="studentImage1" id="studentImage1">
-    </div>
-    <div class="col-xl-6">
-        <label class="form-control-label">Student Image 2<span class="text-danger ml-2">*</span></label>
-        <div class="image-box" id="imageBox2" onclick="captureImage(2)">
-            <video id="video2" autoplay></video>
-            <canvas id="canvas2" style="display: none;"></canvas>
-        </div>
-        <input type="hidden" name="studentImage2" id="studentImage2">
-    </div>
-</div>
-
-
-
+                                        <div class="form-group row mb-3">
+                                            <div class="col-xl-6">
+                                                <label class="form-control-label">Student Image 1<span class="text-danger ml-2">*</span></label>
+                                                <div class="image-box" id="imageBox1" onclick="captureImage(1)">
+                                                    <video id="video1" autoplay></video>
+                                                    <canvas id="canvas1" style="display: none;"></canvas>
+                                                </div>
+                                                <input type="hidden" name="studentImage1" id="studentImage1">
+                                            </div>
+                                            <div class="col-xl-6">
+                                                <label class="form-control-label">Student Image 2<span class="text-danger ml-2">*</span></label>
+                                                <div class="image-box" id="imageBox2" onclick="captureImage(2)">
+                                                    <video id="video2" autoplay></video>
+                                                    <canvas id="canvas2" style="display: none;"></canvas>
+                                                </div>
+                                                <input type="hidden" name="studentImage2" id="studentImage2">
+                                            </div>
+                                        </div>
 
                                         <?php
                     if (isset($Id))
