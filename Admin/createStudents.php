@@ -33,16 +33,16 @@ if (isset($_POST['save'])) {
     } 
     
     else {
-        // Save images to the server
-        $imagePath1 = saveImage($studentImage1, $admissionNumber . '_1');
-        $imagePath2 = saveImage($studentImage2, $admissionNumber . '_2');
-
-        if ($imagePath1 && $imagePath2) {
-            // Insert data into the database
-            $query = mysqli_query($conn, "INSERT INTO tblstudents 
-                (firstName, lastName, otherName, admissionNumber, classId, classArmId, studentImage1, studentImage2, dateCreated) 
-                VALUES ('$firstName', '$lastName', '$otherName', '$admissionNumber', '$classId', '$classArmId', '$imagePath1', '$imagePath2', '$dateCreated')");
-
+            // Save images to the server
+            $imagePath1 = saveImage($studentImage1, $admissionNumber . '_1');
+            $imagePath2 = saveImage($studentImage2, $admissionNumber . '_2');
+        
+            if ($imagePath1 && $imagePath2) {
+                // Insert data into the database with file paths
+                $query = mysqli_query($conn, "INSERT INTO tblstudents 
+                    (firstName, lastName, otherName, admissionNumber, classId, classArmId, studentImage1, studentImage2, dateCreated) 
+                    VALUES ('$firstName', '$lastName', '$otherName', '$admissionNumber', '$classId', '$classArmId', '$imagePath1', '$imagePath2', '$dateCreated')");
+            
             if ($query) {
                 $statusMsg = "<div class='alert alert-success' style='margin-right:700px;' id='successMsg'>Created Successfully!</div>";
                 echo "<script>
@@ -81,7 +81,7 @@ if (isset($_POST['save'])) {
     }
 }
 
-// Function to save base64 image to server
+// Function to save base64 image to the server
 function saveImage($base64String, $admissionNumber) {
     if (!empty($base64String)) {
         // Extract the base64 string and the file extension
@@ -91,25 +91,25 @@ function saveImage($base64String, $admissionNumber) {
 
         // Create a unique file name
         $fileName = $admissionNumber . '.' . $extension;
-        return $fileName;
 
         // Define the file path
-        //$filePath = $folder . '/' . $fileName;
-
-        // Create the folder if it doesn't exist
-        /*if (!is_dir($folder)) {
+        $folder = 'labels';  // Make sure this folder exists or create it
+        if (!is_dir($folder)) {
             mkdir($folder, 0777, true);
         }
+
+        $filePath = $folder . '/' . $fileName;
 
         // Save the file to the server
         if (file_put_contents($filePath, base64_decode($data))) {
             return $filePath; // Return the file path
         } else {
             return false; // Return false if saving failed
-        }*/
+        }
     }
     return false;
 }
+
 
 
 
@@ -549,8 +549,6 @@ function captureImage(boxNumber) {
 }
 
 </script>
-
-
 
         <script src="../vendor/jquery/jquery.min.js"></script>
         <script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
