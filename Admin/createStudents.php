@@ -93,7 +93,7 @@ function saveImage($base64String, $admissionNumber) {
         $fileName = $admissionNumber . '.' . $extension;
 
         // Define the file path
-        $folder = 'labels';  // Make sure this folder exists or create it
+        $folder = '../ClassTeacher/labels';  // Make sure this folder exists or create it
         if (!is_dir($folder)) {
             mkdir($folder, 0777, true);
         }

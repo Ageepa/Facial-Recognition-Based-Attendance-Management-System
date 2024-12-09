@@ -64,7 +64,7 @@ $students = mysqli_num_rows($query1);
                 <div class="card-body">
                   <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
-                      <div class="text-xs font-weight-bold text-uppercase mb-1">Students</div>
+                      <div class="text-xs font-weight-bold text-uppercase mb-1">Total Students</div>
                       <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800"><?php echo $students;?></div>
                       <div class="mt-2 mb-0 text-muted text-xs">
                         <!-- <span class="text-success mr-2"><i class="fas fa-arrow-up"></i> 20.4%</span>
@@ -88,7 +88,7 @@ $class = mysqli_num_rows($query1);
                 <div class="card-body">
                   <div class="row align-items-center">
                     <div class="col mr-2">
-                      <div class="text-xs font-weight-bold text-uppercase mb-1">Classes</div>
+                      <div class="text-xs font-weight-bold text-uppercase mb-1">Total Classes</div>
                       <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo $class;?></div>
                       <div class="mt-2 mb-0 text-muted text-xs">
                         <!-- <span class="text-success mr-2"><i class="fa fa-arrow-up"></i> 3.48%</span>
@@ -112,7 +112,7 @@ $classArms = mysqli_num_rows($query1);
                 <div class="card-body">
                   <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
-                      <div class="text-xs font-weight-bold text-uppercase mb-1">Class Arms</div>
+                      <div class="text-xs font-weight-bold text-uppercase mb-1">Total Class Arms</div>
                       <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo $classArms;?></div>
                       <div class="mt-2 mb-0 text-muted text-xs">
                         <!-- <span class="text-success mr-2"><i class="fas fa-arrow-up"></i> 12%</span>
@@ -129,7 +129,7 @@ $classArms = mysqli_num_rows($query1);
             
             <!-- Std Att Card  -->
             <?php 
-$query1=mysqli_query($conn,"SELECT * from tblattendance");                       
+$query1=mysqli_query($conn,"SELECT * from tblattendance where status = '1'");                       
 $totAttendance = mysqli_num_rows($query1);
 ?>
             <div class="col-xl-3 col-md-6 mb-4">
@@ -162,7 +162,7 @@ $totAttendance = mysqli_num_rows($query1);
                             <div class="card-body">
                               <div class="row no-gutters align-items-center">
                                 <div class="col mr-2">
-                                  <div class="text-xs font-weight-bold text-uppercase mb-1">Class Teachers</div>
+                                  <div class="text-xs font-weight-bold text-uppercase mb-1">Total Class Teachers</div>
                                   <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo $classTeacher;?></div>
                                   <div class="mt-2 mb-0 text-muted text-xs">
                                     <!-- <span class="text-success mr-2"><i class="fas fa-arrow-up"></i> 12%</span>
@@ -230,12 +230,9 @@ $totAttendance = mysqli_num_rows($query1);
                         </div>
         
         </div>
-        <!---Container Fluid-->
       </div>
-      <!-- Footer -->
-      <?php include 'includes/footer.php';?>
-      <!-- Footer -->
     </div>
+      <?php include 'includes/footer.php';?>
   </div>
 
   <!-- Scroll to top -->
