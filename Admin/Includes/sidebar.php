@@ -41,6 +41,24 @@
              </div>
          </div>
      </li>
+
+     <hr class="sidebar-divider">
+     <div class="sidebar-heading">
+         Principal/Vice Principal
+     </div>
+     <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePrincipal" aria-expanded="true" aria-controls="collapsePrincipal">
+            <i class="fas fa-chalkboard-teacher"></i>
+            <span>Manage Principal</span>
+        </a>
+        <div id="collapsePrincipal" class="collapse" aria-labelledby="headingPrincipal" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Manage Principal</h6>
+                <a class="collapse-item" href="createPrincipal.php">Create Principal</a>
+            </div>
+        </div>
+    </li>
+
      <hr class="sidebar-divider">
      <div class="sidebar-heading">
          Teachers

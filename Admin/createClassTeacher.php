@@ -34,6 +34,7 @@ if(isset($_POST['save'])){
         }, 3000);
       </script>";
       }
+
     else{
 
     $query=mysqli_query($conn,"INSERT into tblclassteacher(firstName,lastName,emailAddress,password,phoneNo,classId,classArmId,dateCreated) 
@@ -103,28 +104,32 @@ if(isset($_POST['save'])){
               $query=mysqli_query($conn,"UPDATE tblclassteacher SET firstName='$firstName',lastName='$lastName',emailAddress='$emailAddress',phoneNo='$phoneNo',classArmId='$classArmId' WHERE Id='$Id'");
 
               if ($query) {
-                 $statusMsg = "<div class='alert alert-success'  style='margin-right:700px;' id='successMsg'>Updated Successfully!</div>";
-                 echo "<script>
-                 setTimeout(function() {
-                     var msg = document.getElementById('successMsg');
-                     if (msg) {
-                         msg.style.display = 'none';
-                     }
-                 }, 3000);
-               </script>";
-               }
-             else
-             {
-                 $statusMsg = "<div class='alert alert-danger' style='margin-right:700px;' id='errorMsg'>An error Occurred!</div>";
-                 echo "<script>
-                 setTimeout(function() {
-                     var msg = document.getElementById('errorMsg');
-                     if (msg) {
-                         msg.style.display = 'none';
-                     }
-                 }, 3000);
-               </script>";
-             }
+
+                $statusMsg = "<div class='alert alert-success' style='margin-right:700px;' id='successMsg'>Updated Successfully!</div>";
+                echo "<script> 
+                    setTimeout(function() {
+                        var msg = document.getElementById('successMsg');
+                        if (msg) {
+                            msg.style.display = 'none';
+                        }
+                        window.location = (\"createClassTeacher.php\")
+                    }, 3000);
+                </script>";
+
+            }
+
+            else
+            {
+                $statusMsg = "<div class='alert alert-danger' style='margin-right:700px;' id='statusMsg'>An error Occurred!</div>";
+                echo "<script>
+                    setTimeout(function() {
+                        var msg = document.getElementById('statusMsg');
+                        if (msg) {
+                            msg.style.display = 'none';
+                        }
+                    }, 3000);
+                </script>";
+            }
         }
     }
 
@@ -292,7 +297,7 @@ if(isset($_POST['save'])){
                             ?>
                                             </div>
                                         </div>
-                                        <?php
+                                   <?php
                     if (isset($Id))
                     {
                     ?>
@@ -301,9 +306,10 @@ if(isset($_POST['save'])){
                                         <?php
                     } else {           
                     ?>
-                                        <button type="submit" name="save" class="btn btn-primary">Save</button>
+                                        <button type="submit" name="save"
+                                            class="btn btn-primary">Save</button>&nbsp;&nbsp;
                                         <?php
-                    }         
+}         
                     ?>
                                     </form>
                                 </div>

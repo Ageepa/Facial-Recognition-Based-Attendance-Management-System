@@ -78,11 +78,39 @@ $students = mysqli_num_rows($query1);
                 </div>
               </div>
             </div>
+
+
+          <!-- Teachers Card  -->
+          <?php 
+            $query1=mysqli_query($conn,"SELECT * from tblprincipal");                       
+            $principal = mysqli_num_rows($query1);
+            ?>
+                        <div class="col-xl-3 col-md-6 mb-4">
+                          <div class="card h-100">
+                            <div class="card-body">
+                              <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                  <div class="text-xs font-weight-bold text-uppercase mb-1">Total Principals</div>
+                                  <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo $principal;?></div>
+                                  <div class="mt-2 mb-0 text-muted text-xs">
+                                    <!-- <span class="text-success mr-2"><i class="fas fa-arrow-up"></i> 12%</span>
+                                    <span>Since last years</span> -->
+                                  </div>
+                                </div>
+                                <div class="col-auto">
+                                  <i class="fas fa-chalkboard-teacher fa-2x text-danger"></i>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+
             <!-- Class Card -->
              <?php 
-$query1=mysqli_query($conn,"SELECT * from tblclass");                       
-$class = mysqli_num_rows($query1);
-?>
+              $query1=mysqli_query($conn,"SELECT * from tblclass");                       
+              $class = mysqli_num_rows($query1);
+              ?>
             <div class="col-xl-3 col-md-6 mb-4">
               <div class="card h-100">
                 <div class="card-body">
@@ -188,7 +216,7 @@ $totAttendance = mysqli_num_rows($query1);
                             <div class="card-body">
                               <div class="row no-gutters align-items-center">
                                 <div class="col mr-2">
-                                  <div class="text-xs font-weight-bold text-uppercase mb-1">Session & Terms</div>
+                                  <div class="text-xs font-weight-bold text-uppercase mb-1">Total Session & Terms</div>
                                   <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo $sessTerm;?></div>
                                   <div class="mt-2 mb-0 text-muted text-xs">
                                     <!-- <span class="text-success mr-2"><i class="fas fa-arrow-up"></i> 12%</span>
@@ -203,35 +231,9 @@ $totAttendance = mysqli_num_rows($query1);
                           </div>
                         </div>
 
-
-                        <!-- Terms Card  -->
-            <?php 
-            $query1=mysqli_query($conn,"SELECT * from tblterm");                       
-            $termonly = mysqli_num_rows($query1);
-            ?>
-                        <div class="col-xl-3 col-md-6 mb-4">
-                          <div class="card h-100">
-                            <div class="card-body">
-                              <div class="row no-gutters align-items-center">
-                                <div class="col mr-2">
-                                  <div class="text-xs font-weight-bold text-uppercase mb-1">Terms</div>
-                                  <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo $termonly;?></div>
-                                  <div class="mt-2 mb-0 text-muted text-xs">
-                                    <!-- <span class="text-success mr-2"><i class="fas fa-arrow-up"></i> 12%</span>
-                                    <span>Since last years</span> -->
-                                  </div>
-                                </div>
-                                <div class="col-auto">
-                                  <i class="fas fa-th fa-2x text-info"></i>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-        
-        </div>
-      </div>
-    </div>
+                  </div>
+                </div>
+              </div>
       <?php include 'includes/footer.php';?>
   </div>
 

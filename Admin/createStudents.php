@@ -10,6 +10,8 @@ if (isset($_POST['save'])) {
     $lastName = $_POST['lastName'];
     $otherName = $_POST['otherName'];
     $admissionNumber = $_POST['admissionNumber'];
+    $parentsemailAddress = $_POST['parentsemailAddress'];
+    $parentsPhoneNo = $_POST['parentsPhoneNo'];
     $classId = $_POST['classId'];
     $classArmId = $_POST['classArmId'];
     $studentImage1 = $_POST['studentImage1']; // Base64 string
@@ -40,8 +42,8 @@ if (isset($_POST['save'])) {
             if ($imagePath1 && $imagePath2) {
                 // Insert data into the database with file paths
                 $query = mysqli_query($conn, "INSERT INTO tblstudents 
-                    (firstName, lastName, otherName, admissionNumber, classId, classArmId, studentImage1, studentImage2, dateCreated) 
-                    VALUES ('$firstName', '$lastName', '$otherName', '$admissionNumber', '$classId', '$classArmId', '$imagePath1', '$imagePath2', '$dateCreated')");
+                    (firstName, lastName, otherName, admissionNumber, parentsemailAddress, parentsPhoneNo, classId, classArmId, studentImage1, studentImage2, dateCreated) 
+                    VALUES ('$firstName', '$lastName', '$otherName', '$admissionNumber', '$parentsemailAddress', '$parentsPhoneNo', '$classId', '$classArmId', '$imagePath1', '$imagePath2', '$dateCreated')");
             
             if ($query) {
                 $statusMsg = "<div class='alert alert-success' style='margin-right:700px;' id='successMsg'>Created Successfully!</div>";
@@ -129,15 +131,18 @@ function saveImage($base64String, $admissionNumber) {
           $firstName=$_POST['firstName'];
           $lastName=$_POST['lastName'];
           $otherName=$_POST['otherName'];
-
           $admissionNumber=$_POST['admissionNumber'];
+          $parentsemailAddress=$_POST['parentsemailAddress'];
+          $parentsPhoneNo=$_POST['parentsPhoneNo'];
           $classId=$_POST['classId'];
           $classArmId=$_POST['classArmId'];
           $dateCreated = date("Y-m-d");
 
- $query=mysqli_query($conn,"update tblstudents set firstName='$firstName', lastName='$lastName',
-    otherName='$otherName', admissionNumber='$admissionNumber',classId='$classId',classArmId='$classArmId'
-    where Id='$Id'");
+        $query=mysqli_query($conn,"update tblstudents set firstName='$firstName', lastName='$lastName',
+            otherName='$otherName', admissionNumber='$admissionNumber', parentsemailAddress='$parentsemailAddress', 
+            parentsPhoneNo='$parentsPhoneNo', classId='$classId', classArmId='$classArmId'
+            where Id='$Id'");
+            
             if ($query) {
 
                 $statusMsg = "<div class='alert alert-success' style='margin-right:700px;' id='successMsg'>Updated Successfully!</div>";
@@ -289,28 +294,43 @@ function saveImage($base64String, $admissionNumber) {
                                             <div class="col-xl-6">
                                                 <label class="form-control-label">Firstname<span
                                                         class="text-danger ml-2">*</span></label>
-                                                <input type="text" class="form-control" name="firstName"
+                                                <input type="text" class="form-control" required name="firstName"
                                                     value="<?php echo $row['firstName'];?>" id="exampleInputFirstName">
                                             </div>
                                             <div class="col-xl-6">
                                                 <label class="form-control-label">Lastname<span
                                                         class="text-danger ml-2">*</span></label>
-                                                <input type="text" class="form-control" name="lastName"
-                                                    value="<?php echo $row['lastName'];?>" id="exampleInputFirstName">
+                                                <input type="text" class="form-control" required name="lastName"
+                                                    value="<?php echo $row['lastName'];?>" id="exampleInputLastName">
                                             </div>
                                         </div>
                                         <div class="form-group row mb-3">
                                             <div class="col-xl-6">
                                                 <label class="form-control-label">Other Name</label>
-                                                <input type="text" class="form-control" name="otherName"
-                                                    value="<?php echo $row['otherName'];?>" id="exampleInputFirstName">
+                                                <input type="text" class="form-control" requiredname="otherName"
+                                                    value="<?php echo $row['otherName'];?>" id="exampleInputOtherName">
                                             </div>
                                             <div class="col-xl-6">
                                                 <label class="form-control-label">Admission Number<span
                                                         class="text-danger ml-2">*</span></label>
                                                 <input type="text" class="form-control" required name="admissionNumber"
                                                     value="<?php echo $row['admissionNumber'];?>"
-                                                    id="exampleInputFirstName">
+                                                    id="exampleInputadmissionNumber">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row mb-3">
+                                            <div class="col-xl-6">
+                                                <label class="form-control-label">Parents Email Address<span
+                                                        class="text-danger ml-2">*</span></label>
+                                                <input type="text" class="form-control" required name="parentsemailAddress"
+                                                    value="<?php echo $row['parentsemailAddress'];?>" id="exampleInputparentsemailAddress">
+                                            </div>
+                                            <div class="col-xl-6">
+                                                <label class="form-control-label">Parents Phone No<span
+                                                        class="text-danger ml-2">*</span></label>
+                                                <input type="text" class="form-control" required name="parentsPhoneNo"
+                                                    value="<?php echo $row['parentsPhoneNo'];?>"
+                                                    id="exampleInputPhoneNo">
                                             </div>
                                         </div>
                                         <div class="form-group row mb-3">
