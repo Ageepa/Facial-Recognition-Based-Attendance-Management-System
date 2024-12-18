@@ -74,7 +74,7 @@ if (isset($_POST['login'])) {
             }
         }
         // Authentication logic for Principal/Vice Principal
-        elseif ($userType == "Principal/Vice Principal") {
+        elseif ($userType == "Principal") {
             $query = "SELECT * FROM tblprincipal WHERE emailAddress = '$username' AND password = '$password'";
             $rs = $conn->query($query);
             $num = $rs->num_rows;
@@ -133,7 +133,7 @@ if (isset($_POST['login'])) {
                                             <select required name="userType" class="form-control mb-3">
                                                 <option value="">--Select User Roles--</option>
                                                 <option value="Administrator" <?= isset($userType) && $userType == "Administrator" ? "selected" : "" ?>>Administrator</option>
-                                                <option value="Principal" <?= isset($userType) && $userType == "Principal/Vice Principal" ? "selected" : "" ?>>Principal/Vice Principal</option>
+                                                <option value="Principal" <?= isset($userType) && $userType == "Principal" ? "selected" : "" ?>>Principal</option>
                                                 <option value="ClassTeacher" <?= isset($userType) && $userType == "ClassTeacher" ? "selected" : "" ?>>Teacher</option>
                                             </select>
                                             <div class="error"><?= $errorMessages['userType'] ?></div>

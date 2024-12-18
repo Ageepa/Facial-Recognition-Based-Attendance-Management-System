@@ -41,7 +41,7 @@ if(isset($_POST['save'])){
 
     if ($query) {
 
-        $statusMsg = "<div class='alert alert-success'  style='margin-left:700px;' id='successMsg'>Created Successfully!</div>";
+        $statusMsg = "<div class='alert alert-success'  style='margin-right:700px;' id='successMsg'>Created Successfully!</div>";
         echo "<script>
         setTimeout(function() {
             var msg = document.getElementById('successMsg');
@@ -121,9 +121,18 @@ if (isset($_GET['Id']) && isset($_GET['action']) && $_GET['action'] == "delete")
     $query = mysqli_query($conn, "DELETE FROM tblprincipal WHERE Id='$Id'");
 
     if ($query == TRUE) {
-        echo "<script type = \"text/javascript\">
-        window.location = (\"createPrincipal.php\")
-        </script>"; 
+        
+        $statusMsg = "<div class='alert alert-success' style='margin-right:700px;' id='successMsg'>Deleted Successfully!</div>";
+        echo "<script> 
+            setTimeout(function() {
+                var msg = document.getElementById('successMsg');
+                if (msg) {
+                    msg.style.display = 'none';
+                }
+                window.location = (\"createPrincipal.php\")
+            }, 3000);
+        </script>";
+
     } else {
         $statusMsg = "<div class='alert alert-danger' style='center:700px;'>An error Occurred!</div>"; 
     }
@@ -251,7 +260,8 @@ if (isset($_GET['Id']) && isset($_GET['action']) && $_GET['action'] == "delete")
                                                     </tr>";
                                                 }
                                             } else {
-                                                echo "<div class='alert alert-danger' style='margin-right:700px;'>No Record Found!</div>";
+                                                echo   
+                                                "<div class='alert alert-danger' role='alert'>No Record Found!</div>";
                                             }
                                             ?>
                                         </tbody>

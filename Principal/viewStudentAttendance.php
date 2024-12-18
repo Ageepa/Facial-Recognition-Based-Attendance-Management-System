@@ -1,11 +1,7 @@
-
 <?php 
 error_reporting(0);
 include '../Includes/dbcon.php';
 include '../Includes/session.php';
-
-
-
 ?>
 
 <!DOCTYPE html>
@@ -24,24 +20,51 @@ include '../Includes/session.php';
   <link href="css/ruang-admin.min.css" rel="stylesheet">
 
 <script>
-    function typeDropDown(str) {
+function loadClassArms(classId) {
+    if (classId == "") {
+        document.getElementById("classArmDropdown").innerHTML = "<option value=''>--Select Class Arm--</option>";
+        document.getElementById("studentDropdown").innerHTML = "<option value=''>--Select Student--</option>";
+        return;
+    } else {
+        const xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                document.getElementById("classArmDropdown").innerHTML = this.responseText;
+            }
+        };
+        xmlhttp.open("GET", "ajaxClassArms2.php?classId=" + classId, true);
+        xmlhttp.send();
+    }
+}
+
+function loadStudents(classArmId) {
+    if (classArmId == "") {
+        document.getElementById("studentDropdown").innerHTML = "<option value=''>--Select Student--</option>";
+        return;
+    } else {
+        const xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                document.getElementById("studentDropdown").innerHTML = this.responseText;
+            }
+        };
+        xmlhttp.open("GET", "ajaxCallStudents.php?classArmId=" + classArmId, true);
+        xmlhttp.send();
+    }
+}
+
+function typeDropDown(str) {
     if (str == "") {
         document.getElementById("txtHint").innerHTML = "";
         return;
-    } else { 
-        if (window.XMLHttpRequest) {
-            // code for IE7+, Firefox, Chrome, Opera, Safari
-            xmlhttp = new XMLHttpRequest();
-        } else {
-            // code for IE6, IE5
-            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-        }
+    } else {
+        const xmlhttp = new XMLHttpRequest();
         xmlhttp.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200) {
                 document.getElementById("txtHint").innerHTML = this.responseText;
             }
         };
-        xmlhttp.open("GET","ajaxCallTypes.php?tid="+str,true);
+        xmlhttp.open("GET", "ajaxCallTypes.php?tid=" + str, true);
         xmlhttp.send();
     }
 }
@@ -76,39 +99,48 @@ include '../Includes/session.php';
               <div class="card mb-4">
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                   <h6 class="m-0 font-weight-bold text-primary">View Student Attendance</h6>
-                    <?php echo $statusMsg; ?>
+                  <?php echo $statusMsg; ?>
                 </div>
                 <div class="card-body">
                   <form method="post">
                     <div class="form-group row mb-3">
-                        <div class="col-xl-6">
-                        <label class="form-control-label">Select Student<span class="text-danger ml-2">*</span></label>
-                        <?php
-                        $qry= "SELECT * FROM tblstudents where classId = '$_SESSION[classId]' and classArmId = '$_SESSION[classArmId]' ORDER BY firstName ASC";
-                        $result = $conn->query($qry);
-                        $num = $result->num_rows;		
-                        if ($num > 0){
-                          echo ' <select required name="admissionNumber" class="form-control mb-3">';
-                          echo'<option value="">--Select Student--</option>';
-                          while ($rows = $result->fetch_assoc()){
-                          echo'<option value="'.$rows['admissionNumber'].'" >'.$rows['firstName'].' '.$rows['lastName'].'</option>';
-                              }
-                                  echo '</select>';
-                              }
-                            ?>  
+                        <div class="col-xl-3">
+                            <label class="form-control-label">Select Class<span class="text-danger ml-2">*</span></label>
+                            <select required name="classId" class="form-control mb-3" onchange="loadClassArms(this.value)">
+                              <option value="">--Select Class--</option>
+                              <?php
+                                $qry = "SELECT * FROM tblclass ORDER BY className ASC";
+                                $result = $conn->query($qry);
+                                while ($rows = $result->fetch_assoc()) {
+                                  echo '<option value="' . $rows['Id'] . '">' . $rows['className'] . '</option>';
+                                }
+                              ?>
+                            </select>
                         </div>
-                        <div class="col-xl-6">
-                        <label class="form-control-label">Type<span class="text-danger ml-2">*</span></label>
-                          <select required name="type" onchange="typeDropDown(this.value)" class="form-control mb-3">
-                          <option value="">--Select--</option>
-                          <option value="1" >All</option>
-                          <option value="2" >By Single Date</option>
-                          <option value="3" >By Date Range</option>
-                        </select>
+                        <div class="col-xl-3">
+                            <label class="form-control-label">Select Class Arm<span class="text-danger ml-2">*</span></label>
+                            <select required name="classArmId" id="classArmDropdown" class="form-control mb-3" onchange="loadStudents(this.value)">
+                              <option value="">--Select Class Arm--</option>
+                            </select>
+                        </div>
+                        <div class="col-xl-3">
+                            <label class="form-control-label">Select Student<span class="text-danger ml-2">*</span></label>
+                            <select required name="admissionNumber" id="studentDropdown" class="form-control mb-3">
+                              <option value="">--Select Student--</option>
+                            </select>
+                        </div>
+                        <div class="col-xl-3">
+                            <label class="form-control-label">Type<span class="text-danger ml-2">*</span></label>
+                            <select required name="type" onchange="typeDropDown(this.value)" class="form-control mb-3">
+                              <option value="">--Select--</option>
+                              <option value="1">All</option>
+                              <option value="2">By Single Date</option>
+                              <option value="3">By Date Range</option>
+                            </select>
                         </div>
                     </div>
                       <?php
-                        echo"<div id='txtHint'></div>";
+                        echo "<div id='txtHint'></div>";
                       ?>
                     <button type="submit" name="view" class="btn btn-primary">View Attendance</button>
                   </form>
@@ -120,7 +152,7 @@ include '../Includes/session.php';
               <div class="col-lg-12">
               <div class="card mb-4">
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                  <h6 class="m-0 font-weight-bold text-primary">Class Attendance</h6>
+                  <h6 class="m-0 font-weight-bold text-primary">Class Student Attendance</h6>
                 </div>
                 <div class="table-responsive p-3">
                   <table class="table align-items-center table-flush table-hover" id="dataTableHover">
@@ -139,35 +171,40 @@ include '../Includes/session.php';
                         <th>Date</th>
                       </tr>
                     </thead>
-                   
                     <tbody>
-
                   <?php
-
                     if(isset($_POST['view'])){
+                      $classId = $_POST['classId'];
+                      $classArmId = $_POST['classArmId'];
+                      $admissionNumber = $_POST['admissionNumber'];
+                      $type = $_POST['type'];
+                  
+                      // Set session variables for use in queries
+                      $_SESSION['classId'] = $classId;
+                      $_SESSION['classArmId'] = $classArmId;
+                  
+                      $query = "";
+                      if ($type == "1") { // All Attendance
+                          $query = "SELECT tblattendance.Id, tblattendance.status, tblattendance.dateTimeTaken, tblclass.className,
+                          tblclassarms.classArmName, tblsessionterm.sessionName, tblsessionterm.termId, tblterm.termName,
+                          tblstudents.firstName, tblstudents.lastName, tblstudents.otherName, tblstudents.admissionNumber
+                          FROM tblattendance
+                          INNER JOIN tblclass ON tblclass.Id = tblattendance.classId
+                          INNER JOIN tblclassarms ON tblclassarms.Id = tblattendance.classArmId
+                          INNER JOIN tblsessionterm ON tblsessionterm.Id = tblattendance.sessionTermId
+                          INNER JOIN tblterm ON tblterm.Id = tblsessionterm.termId
+                          INNER JOIN tblstudents ON tblstudents.admissionNumber = tblattendance.admissionNo
+                          WHERE tblattendance.admissionNo = '$admissionNumber' AND 
+                                tblattendance.classId = '$classId' AND 
+                                tblattendance.classArmId = '$classArmId'";
 
-                       $admissionNumber =  $_POST['admissionNumber'];
-                       $type =  $_POST['type'];
+                    }
 
-                       if($type == "1"){ //All Attendance
-
-                        $query = "SELECT tblattendance.Id,tblattendance.status,tblattendance.dateTimeTaken,tblclass.className,
-                        tblclassarms.classArmName,tblsessionterm.sessionName,tblsessionterm.termId,tblterm.termName,
-                        tblstudents.firstName,tblstudents.lastName,tblstudents.otherName,tblstudents.admissionNumber
-                        FROM tblattendance
-                        INNER JOIN tblclass ON tblclass.Id = tblattendance.classId
-                        INNER JOIN tblclassarms ON tblclassarms.Id = tblattendance.classArmId
-                        INNER JOIN tblsessionterm ON tblsessionterm.Id = tblattendance.sessionTermId
-                        INNER JOIN tblterm ON tblterm.Id = tblsessionterm.termId
-                        INNER JOIN tblstudents ON tblstudents.admissionNumber = tblattendance.admissionNo
-                        where tblattendance.admissionNo = '$admissionNumber' and tblattendance.classId = '$_SESSION[classId]' and tblattendance.classArmId = '$_SESSION[classArmId]'";
-
-                       }
-                       if($type == "2"){ //Single Date Attendance
+                      if($type == "2"){ //Single Date Attendance
 
                         $singleDate =  $_POST['singleDate'];
 
-                         $query = "SELECT tblattendance.Id,tblattendance.status,tblattendance.dateTimeTaken,tblclass.className,
+                        $query = "SELECT tblattendance.Id,tblattendance.status,tblattendance.dateTimeTaken,tblclass.className,
                         tblclassarms.classArmName,tblsessionterm.sessionName,tblsessionterm.termId,tblterm.termName,
                         tblstudents.firstName,tblstudents.lastName,tblstudents.otherName,tblstudents.admissionNumber
                         FROM tblattendance
@@ -185,7 +222,7 @@ include '../Includes/session.php';
                          $fromDate =  $_POST['fromDate'];
                          $toDate =  $_POST['toDate'];
 
-                         $query = "SELECT tblattendance.Id,tblattendance.status,tblattendance.dateTimeTaken,tblclass.className,
+                        $query = "SELECT tblattendance.Id,tblattendance.status,tblattendance.dateTimeTaken,tblclass.className,
                         tblclassarms.classArmName,tblsessionterm.sessionName,tblsessionterm.termId,tblterm.termName,
                         tblstudents.firstName,tblstudents.lastName,tblstudents.otherName,tblstudents.admissionNumber
                         FROM tblattendance
