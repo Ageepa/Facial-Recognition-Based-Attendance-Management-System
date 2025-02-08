@@ -15,16 +15,34 @@ if (isset($_POST['submit'])) {
     $confirmPasswordHash = md5($confirmPassword);
 
     try {
-        // Check if email exists in tblclassteacher
-        $query = "SELECT * FROM tblclassteacher WHERE emailAddress = '$email' AND password = '$oldPasswordHash'";
-        $result = mysqli_query($conn, $query);
+        $isUserFound = false;
 
-        if (mysqli_num_rows($result) > 0) {
+        // Check if email exists in tblclassteacher
+        $queryClassTeacher = "SELECT * FROM tblclassteacher WHERE emailAddress = '$email' AND password = '$oldPasswordHash'";
+        $resultClassTeacher = mysqli_query($conn, $queryClassTeacher);
+
+        if (mysqli_num_rows($resultClassTeacher) > 0) {
+            $isUserFound = true;
+            $table = 'tblclassteacher';
+        }
+
+        // Check if email exists in tblprincipal (only if not found in tblclassteacher)
+        if (!$isUserFound) {
+            $queryPrincipal = "SELECT * FROM tblprincipal WHERE emailAddress = '$email' AND password = '$oldPasswordHash'";
+            $resultPrincipal = mysqli_query($conn, $queryPrincipal);
+
+            if (mysqli_num_rows($resultPrincipal) > 0) {
+                $isUserFound = true;
+                $table = 'tblprincipal';
+            }
+        }
+
+        if ($isUserFound) {
             // Check if new password and confirm password match
             if ($newPassword === $confirmPassword) {
-                // Update the password in tblclassteacher
-                $updateClassTeacherQuery = "UPDATE tblclassteacher SET password = '$newPasswordHash' WHERE emailAddress = '$email'";
-                mysqli_query($conn, $updateClassTeacherQuery);
+                // Update the password in the appropriate table
+                $updatePasswordQuery = "UPDATE $table SET password = '$newPasswordHash' WHERE emailAddress = '$email'";
+                mysqli_query($conn, $updatePasswordQuery);
 
                 // Insert the new password into tblresetpassword
                 $insertResetPasswordQuery = "INSERT INTO tblresetpassword (emailAddress, oldPassword, newPassword, confirmPassword) 
@@ -146,12 +164,6 @@ if (isset($_POST['submit'])) {
                                             emailInput.classList.add('is-invalid');
                                             document.getElementById('email-error').innerText = 'Invalid email format';
                                             document.getElementById('email-error').style.display = 'block';
-
-                                            // Remove error message after 3 seconds
-                                            //setTimeout(() => {
-                                                //document.getElementById('email-error').style.display = 'none';
-                                            //}, 5000);
-
                                             isValid = false;
                                         } else {
                                             emailInput.classList.remove('is-invalid');
@@ -162,20 +174,14 @@ if (isset($_POST['submit'])) {
                                         if (oldPasswordInput.value.length < 6) {
                                             oldPasswordInput.classList.add('is-invalid');
                                             document.getElementById('old-password-error').innerText = 'Old password must be at least 6 characters long';
-
-                                            // Remove error message after 3 seconds
-                                            //setTimeout(() => {
-                                                //document.getElementById('old-password-error').style.display = 'none';
-                                            //}, 5000);
-
                                             isValid = false;
                                         } else {
                                             oldPasswordInput.classList.remove('is-invalid');
                                             document.getElementById('old-password-error').style.display = 'none';
                                         }
 
-                                        // New password validation
-                                        if (newPasswordInput.value.length < 6) {
+                                       // New password validation
+                                       if (newPasswordInput.value.length < 6) {
                                             newPasswordInput.classList.add('is-invalid');
                                             document.getElementById('new-password-error').innerText = 'New password must be at least 6 characters long';
 

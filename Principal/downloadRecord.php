@@ -165,6 +165,11 @@ if (isset($_POST['download'])) {
   <script src="../vendor/jquery-easing/jquery.easing.min.js"></script>
   <script src="js/ruang-admin.min.js"></script>
 
+   <!-- Scroll to top -->
+    <a class="scroll-to-top rounded" href="#page-top">
+            <i class="fas fa-angle-up"></i>
+    </a>
+
   <!-- AJAX Logic for Class Arm Dropdown -->
   <script>
     $(document).ready(function () {
