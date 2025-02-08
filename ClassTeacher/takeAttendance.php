@@ -18,14 +18,16 @@ $rwws = mysqli_fetch_array($querey);
 $sessionTermId = $rwws['Id'];
 
 $dateTaken = date("Y-m-d");
-$qurty = mysqli_query($conn,"select * from tblattendance where classId = '$_SESSION[classId]' and classArmId = '$_SESSION[classArmId]' and dateTimeTaken='$dateTaken' AND status = '1'");
+$qurty = mysqli_query($conn,"select * from tblattendance where classId = '$_SESSION[classId]' 
+and classArmId = '$_SESSION[classArmId]' and dateTimeTaken='$dateTaken' AND status = '1'");
 $count = mysqli_num_rows($qurty);
 $attendanceTaken = ($count > 0) ? 'true' : 'false'; // Boolean as a string for JavaScript
 
 if ($count == 0) {
     $qus = mysqli_query($conn, "SELECT * FROM tblstudents WHERE classId = '$_SESSION[classId]' AND classArmId = '$_SESSION[classArmId]'");
     while ($ros = $qus->fetch_assoc()) {
-        $existingCheck = mysqli_query($conn, "SELECT * FROM tblattendance WHERE admissionNo = '$ros[admissionNumber]' AND classId = '$_SESSION[classId]' AND classArmId = '$_SESSION[classArmId]' AND dateTimeTaken = '$dateTaken'");
+        $existingCheck = mysqli_query($conn, "SELECT * FROM tblattendance WHERE admissionNo = '$ros[admissionNumber]' AND classId = '$_SESSION[classId]' 
+        AND classArmId = '$_SESSION[classArmId]' AND dateTimeTaken = '$dateTaken'");
         if (mysqli_num_rows($existingCheck) == 0) {
             mysqli_query($conn, "INSERT INTO tblattendance (admissionNo, classId, classArmId, sessionTermId, status, dateTimeTaken) 
                                  VALUES ('$ros[admissionNumber]', '$_SESSION[classId]', '$_SESSION[classArmId]', '$sessionTermId', '0', '$dateTaken')");
@@ -40,7 +42,8 @@ if (isset($_POST['save'])) {
     $N = count($admissionNo);
     $status = "";
 
-    $qurty = mysqli_query($conn,"select * from tblattendance where classId = '$_SESSION[classId]' and classArmId = '$_SESSION[classArmId]' and dateTimeTaken='$dateTaken' and status = '1'");
+    $qurty = mysqli_query($conn,"select * from tblattendance where classId = '$_SESSION[classId]' and classArmId = '$_SESSION[classArmId]' and 
+    dateTimeTaken='$dateTaken' and status = '1'");
     $count = mysqli_num_rows($qurty);
 
     if ($count > 0) {
@@ -364,8 +367,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['admissionNo']) && iss
             }
         };
     }
-
-    function stopWebcam() {
+   function stopWebcam() {
     // Stop the video stream
     if (videoStream) {
         const tracks = videoStream.getTracks();
@@ -373,7 +375,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['admissionNo']) && iss
         video.srcObject = null;
         videoStream = null;
     }
-
     // Hide the video container
     videoContainer.style.display = "none";
     attendanceTaken = true;
@@ -390,10 +391,6 @@ document.addEventListener("keydown", (event) => {
         stopWebcam();
     }
 });
-
 </script>
-
-
-
 </body>
 </html>
