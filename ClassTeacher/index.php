@@ -126,7 +126,7 @@ $classArms = mysqli_num_rows($query1);
 
                         <!-- Pending Requests Card Example -->
                         <?php 
-$query1 = mysqli_query($conn, "SELECT * FROM tblattendance WHERE classId = '$_SESSION[classId]' AND classArmId = '$_SESSION[classArmId]' AND status = '1'");
+$query1 = mysqli_query($conn, "SELECT * FROM tblattendance WHERE classId = '$_SESSION[classId]' AND classArmId = '$_SESSION[classArmId]' AND status = '1' AND DATE(dateTimeTaken) = CURDATE()");
 $totAttendance = mysqli_num_rows($query1);
 ?>
                         <div class="col-xl-3 col-md-6 mb-4">
