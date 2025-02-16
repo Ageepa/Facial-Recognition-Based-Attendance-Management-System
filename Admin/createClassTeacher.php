@@ -16,24 +16,40 @@ if(isset($_POST['save'])){
   $classArmId=$_POST['classArmId'];
   $dateCreated = date("Y-m-d");
    
-    $query=mysqli_query($conn,"select * from tblclassteacher where emailAddress ='$emailAddress'");
-    $ret=mysqli_fetch_array($query);
+  $query=mysqli_query($conn,"select * from tblclassteacher where emailAddress ='$emailAddress'");
+  $ret=mysqli_fetch_array($query);
 
-    $sampPass = "Pass123";
-    $sampPass_2 = md5($sampPass);
+  $query2=mysqli_query($conn,"select * from tblclassteacher where classId ='$classId' and classArmId='$classArmId'");
+  $ret2=mysqli_fetch_array($query2);
 
-    if($ret > 0){ 
+  $sampPass = "Pass123";
+  $sampPass_2 = md5($sampPass);
 
-        $statusMsg = "<div class='alert alert-danger' style='margin-right:700px;' id='statusMsg'>This Email Address Already Exists!</div>";
-        echo "<script>
-        setTimeout(function() {
-            var msg = document.getElementById('statusMsg');
-            if (msg) {
-                msg.style.display = 'none';
-            }
-        }, 3000);
-      </script>";
-      }
+  if($ret > 0){ 
+
+      $statusMsg = "<div class='alert alert-danger' style='margin-right:700px;' id='statusMsg'>This Email Address Already Exists!</div>";
+      echo "<script>
+      setTimeout(function() {
+          var msg = document.getElementById('statusMsg');
+          if (msg) {
+              msg.style.display = 'none';
+          }
+      }, 3000);
+    </script>";
+    }
+
+  elseif($ret2 > 0){ 
+
+      $statusMsg = "<div class='alert alert-danger' style='margin-right:700px;' id='statusMsg'>A teacher has already been assigned to this class and class arm!</div>";
+      echo "<script>
+      setTimeout(function() {
+          var msg = document.getElementById('statusMsg');
+          if (msg) {
+              msg.style.display = 'none';
+          }
+      }, 3000);
+    </script>";
+    }
 
     else{
 
@@ -164,13 +180,29 @@ if(isset($_POST['save'])){
             else
             {
                 $statusMsg = "<div class='alert alert-danger' style='margin-right:700px;'>An error Occurred!</div>";
+                echo "<script>
+                    setTimeout(function() {
+                        var msg = document.getElementById('errorMsg');
+                        if (msg) {
+                            msg.style.display = 'none';
+                        }
+                    }, 3000);
+                </script>";
             }
         }
         else{
 
-            $statusMsg = "<div class='alert alert-danger' style='margin-right:700px;'>An error Occurred!</div>"; 
+            $statusMsg = "<div class='alert alert-danger' style='margin-right:700px;'>An error Occurred!</div>";
+            echo "<script>
+                setTimeout(function() {
+                    var msg = document.getElementById('errorMsg');
+                    if (msg) {
+                        msg.style.display = 'none';
+                    }
+                }, 3000);
+            </script>";
          }
-      
+         unset($Id);
   }
 
 

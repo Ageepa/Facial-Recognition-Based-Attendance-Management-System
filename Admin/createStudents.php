@@ -11,7 +11,7 @@ if (isset($_POST['save'])) {
     $otherName = $_POST['otherName'];
     $admissionNumber = $_POST['admissionNumber'];
     $parentsemailAddress = $_POST['parentsemailAddress'];
-    $parentsPhoneNo = $_POST['parentsPhoneNo'];
+    $parentsphoneNo = $_POST['parentsphoneNo'];
     $classId = $_POST['classId'];
     $classArmId = $_POST['classArmId'];
     $studentImage1 = $_POST['studentImage1']; // Base64 string
@@ -42,8 +42,8 @@ if (isset($_POST['save'])) {
             if ($imagePath1 && $imagePath2) {
                 // Insert data into the database with file paths
                 $query = mysqli_query($conn, "INSERT INTO tblstudents 
-                    (firstName, lastName, otherName, admissionNumber, parentsemailAddress, parentsPhoneNo, classId, classArmId, studentImage1, studentImage2, dateCreated) 
-                    VALUES ('$firstName', '$lastName', '$otherName', '$admissionNumber', '$parentsemailAddress', '$parentsPhoneNo', '$classId', '$classArmId', '$imagePath1', '$imagePath2', '$dateCreated')");
+                    (firstName, lastName, otherName, admissionNumber, parentsemailAddress, parentsphoneNo, classId, classArmId, studentImage1, studentImage2, dateCreated) 
+                    VALUES ('$firstName', '$lastName', '$otherName', '$admissionNumber', '$parentsemailAddress', '$parentsphoneNo', '$classId', '$classArmId', '$imagePath1', '$imagePath2', '$dateCreated')");
             
             if ($query) {
                 $statusMsg = "<div class='alert alert-success' style='margin-right:700px;' id='successMsg'>Created Successfully!</div>";
@@ -133,14 +133,14 @@ function saveImage($base64String, $admissionNumber) {
           $otherName=$_POST['otherName'];
           $admissionNumber=$_POST['admissionNumber'];
           $parentsemailAddress=$_POST['parentsemailAddress'];
-          $parentsPhoneNo=$_POST['parentsPhoneNo'];
+          $parentsphoneNo=$_POST['parentsphoneNo'];
           $classId=$_POST['classId'];
           $classArmId=$_POST['classArmId'];
           $dateCreated = date("Y-m-d");
 
         $query=mysqli_query($conn,"update tblstudents set firstName='$firstName', lastName='$lastName',
             otherName='$otherName', admissionNumber='$admissionNumber', parentsemailAddress='$parentsemailAddress', 
-            parentsPhoneNo='$parentsPhoneNo', classId='$classId', classArmId='$classArmId'
+            parentsphoneNo='$parentsphoneNo', classId='$classId', classArmId='$classArmId'
             where Id='$Id'");
             
             if ($query) {
@@ -210,7 +210,7 @@ function saveImage($base64String, $admissionNumber) {
         }, 3000);
       </script>";
           }
-      
+        unset($Id);
   }
 
 
@@ -328,8 +328,8 @@ function saveImage($base64String, $admissionNumber) {
                                             <div class="col-xl-6">
                                                 <label class="form-control-label">Parents Phone No<span
                                                         class="text-danger ml-2">*</span></label>
-                                                <input type="text" class="form-control" required name="parentsPhoneNo"
-                                                    value="<?php echo $row['parentsPhoneNo'];?>"
+                                                <input type="text" class="form-control" required name="parentsphoneNo"
+                                                    value="<?php echo $row['parentsphoneNo'];?>"
                                                     id="exampleInputPhoneNo">
                                             </div>
                                         </div>

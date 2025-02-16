@@ -17,7 +17,15 @@ if(isset($_POST['save'])){
 
     if($ret > 0){ 
 
-        $statusMsg = "<div class='alert alert-danger' style='margin-right:700px;'>This Session and Term Already Exists!</div>";
+        $statusMsg = "<div class='alert alert-danger' style='margin-right:700px;' id='statusMsg'>This Session and Term Already Exists!</div>";
+        echo "<script>
+        setTimeout(function() {
+            var msg = document.getElementById('statusMsg');
+            if (msg) {
+                msg.style.display = 'none';
+            }
+        }, 3000);
+    </script>";
     }
     else{
 
@@ -25,22 +33,32 @@ if(isset($_POST['save'])){
 
     if ($query) {
         
-        $statusMsg = "<div class='alert alert-success'  style='margin-right:700px;'>Created Successfully!</div>";
+        $statusMsg = "<div class='alert alert-success'  style='margin-right:700px;' id='statusMsg'>Created Successfully!</div>";
+        echo "<script>
+        setTimeout(function() {
+            var msg = document.getElementById('statusMsg');
+            if (msg) {
+                msg.style.display = 'none';
+            }
+        }, 3000);
+    </script>";
     }
     else
     {
-         $statusMsg = "<div class='alert alert-danger' style='margin-right:700px;'>An error Occurred!</div>";
+         $statusMsg = "<div class='alert alert-danger' style='margin-right:700px;' id='statusMsg'>An error Occurred!</div>";
+         echo "<script>
+          setTimeout(function() {
+            var msg = document.getElementById('statusMsg');
+            if (msg) {
+                msg.style.display = 'none';
+            }
+        }, 3000);
+    </script>";
     }
   }
 }
 
 //---------------------------------------EDIT-------------------------------------------------------------
-
-
-
-
-
-
 //--------------------EDIT------------------------------------------------------------
 
  if (isset($_GET['Id']) && isset($_GET['action']) && $_GET['action'] == "edit")
@@ -54,21 +72,38 @@ if(isset($_POST['save'])){
 
         if(isset($_POST['update'])){
     
-             $sessionName=$_POST['sessionName'];
-    $termId=$_POST['termId'];
-    $dateCreated = date("Y-m-d");
+        $sessionName=$_POST['sessionName'];
+        $termId=$_POST['termId'];
+        $dateCreated = date("Y-m-d");
         
             $query=mysqli_query($conn,"update tblsessionterm set sessionName='$sessionName',termId='$termId',isActive='0' where Id='$Id'");
 
             if ($query) {
                 
-                echo "<script type = \"text/javascript\">
-                window.location = (\"createSessionTerm.php\")
-                </script>"; 
+              $statusMsg = "<div class='alert alert-success' style='margin-right:700px;' id='statusMsg'>Updated Successfully!</div>";
+              echo "<script>
+                setTimeout(function() {
+                  var msg = document.getElementById('statusMsg');
+                  if (msg) {
+                  msg.style.display = 'none';
+                }
+                window.location.href='createSessionTerm.php';
+           }, 3000);
+        </script>";
+
             }
             else
             {
-                $statusMsg = "<div class='alert alert-danger' style='margin-right:700px;'>An error Occurred!</div>";
+                $statusMsg = "<div class='alert alert-danger' style='margin-right:700px;' id='statusMsg'>An error Occurred!</div>";
+                echo "<script>
+                setTimeout(function() {
+                  var msg = document.getElementById('statusMsg');
+                  if (msg) {
+                  msg.style.display = 'none';
+                }
+           }, 3000);
+        </script>";
+
             }
         }
     }
@@ -84,15 +119,32 @@ if(isset($_POST['save'])){
 
         if ($query == TRUE) {
 
-                echo "<script type = \"text/javascript\">
-                window.location = (\"createSessionTerm.php\")
-                </script>";  
+          $statusMsg = "<div class='alert alert-success' style='margin-right:700px;' id='statusMsg'>Deleted Successfully!</div>";
+          echo "<script>
+            setTimeout(function() {
+              var msg = document.getElementById('statusMsg');
+              if (msg) {
+              msg.style.display = 'none';
+            }
+            window.location.href='createSessionTerm.php';
+       }, 3000);
+    </script>";
+
         }
         else{
 
-            $statusMsg = "<div class='alert alert-danger' style='margin-right:700px;'>An error Occurred!</div>"; 
+            $statusMsg = "<div class='alert alert-danger' style='margin-right:700px;' id='statusMsg'>An error Occurred!</div>";
+            echo "<script>
+            setTimeout(function() {
+              var msg = document.getElementById('statusMsg');
+              if (msg) {
+              msg.style.display = 'none';
+            }
+       }, 3000);
+    </script>";
+
          }
-      
+      unset($Id);
   }
 
 
@@ -116,14 +168,30 @@ if(isset($_POST['save'])){
                 }
                 else
                 {
-                    $statusMsg = "<div class='alert alert-danger' style='margin-right:700px;'>An error Occurred!</div>";
+                    $statusMsg = "<div class='alert alert-danger' style='margin-right:700px;' id='statusMsg'>An error Occurred!</div>";
+                    echo "<script>
+                    setTimeout(function() {
+                      var msg = document.getElementById('statusMsg');
+                      if (msg) {
+                      msg.style.display = 'none';
+                    }
+               }, 3000);
+            </script>";
                 }
             }
             else
             {
-                $statusMsg = "<div class='alert alert-danger' style='margin-right:700px;'>An error Occurred!</div>";
+                $statusMsg = "<div class='alert alert-danger' style='margin-right:700px;' id='statusMsg'>An error Occurred!</div>";
+                echo "<script>
+                setTimeout(function() {
+                  var msg = document.getElementById('statusMsg');
+                  if (msg) {
+                  msg.style.display = 'none';
+                }
+           }, 3000);
+        </script>";
+
             }
-      
   }
 
 
