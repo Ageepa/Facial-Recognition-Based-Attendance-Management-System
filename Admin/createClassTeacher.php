@@ -149,9 +149,17 @@ if(isset($_POST['save'])){
             $qu=mysqli_query($conn,"update tblclassarms set isAssigned='0' where Id ='$classArmId'");
             if ($qu) {
                 
-                 echo "<script type = \"text/javascript\">
-                window.location = (\"createClassTeacher.php\")
-                </script>"; 
+                $statusMsg = "<div class='alert alert-success' style='margin-right:700px;' id='successMsg'>Deleted Successfully!</div>";
+                echo "<script> 
+                    setTimeout(function() {
+                        var msg = document.getElementById('successMsg');
+                        if (msg) {
+                            msg.style.display = 'none';
+                        }
+                        window.location = (\"createClassTeacher.php\")
+                    }, 3000);
+                </script>";
+
             }
             else
             {

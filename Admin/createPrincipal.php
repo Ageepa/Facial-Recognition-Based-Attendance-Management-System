@@ -22,7 +22,7 @@ if(isset($_POST['save'])){
 
   if($ret > 0){ 
 
-      $statusMsg = "<div class='alert alert-danger' style='margin-right:700px;' id='statusMsg'>This Email Address Already Exists!</div>";
+      $statusMsg = "<div class='alert alert-danger' style='margin-right:700px;' id='statusMsg'>This Email Address Already Exists!!!</div>";
       echo "<script>
       setTimeout(function() {
           var msg = document.getElementById('statusMsg');
@@ -135,7 +135,16 @@ if (isset($_GET['Id']) && isset($_GET['action']) && $_GET['action'] == "delete")
 
     } else {
         $statusMsg = "<div class='alert alert-danger' style='center:700px;'>An error Occurred!</div>"; 
+        echo "<script>
+            setTimeout(function() {
+                var msg = document.getElementById('statusMsg');
+                if (msg) {
+                    msg.style.display = 'none';
+                }
+            }, 3000);
+        </script>";
     }
+    unset($Id);
 }
 
 ?>

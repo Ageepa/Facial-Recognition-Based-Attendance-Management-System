@@ -82,9 +82,16 @@ if(isset($_POST['save'])){
 
             if ($query) {
                 
-                echo "<script type = \"text/javascript\">
-                window.location = (\"createClass.php\")
-                </script>"; 
+                $statusMsg = "<div class='alert alert-success'  style='margin-right:700px;' id='successMsg'>Updated Successfully!</div>";
+                echo "<script>
+                        setTimeout(function() {
+                            var msg = document.getElementById('successMsg');
+                            if (msg) {
+                                msg.style.display = 'none';
+                            }
+                            window.location.href='createClass.php';
+                        }, 3000);
+                      </script>"; 
             }
             else
             {
@@ -107,14 +114,21 @@ if(isset($_POST['save'])){
   if (isset($_GET['Id']) && isset($_GET['action']) && $_GET['action'] == "delete")
 	{
         $Id= $_GET['Id'];
-
+           
         $query = mysqli_query($conn,"DELETE FROM tblclass WHERE Id='$Id'");
 
         if ($query == TRUE) {
 
-                echo "<script type = \"text/javascript\">
-                window.location = (\"createClass.php\")
-                </script>";  
+            $statusMsg = "<div class='alert alert-success'  style='margin-right:700px;' id='successMsg'>Deleted Successfully!</div>";
+            echo "<script>
+                    setTimeout(function() {
+                        var msg = document.getElementById('successMsg');
+                        if (msg) {
+                            msg.style.display = 'none';
+                        }
+                        window.location.href='createClass.php';
+                    }, 3000);
+                  </script>";
         }
         else{
 
@@ -128,7 +142,7 @@ if(isset($_POST['save'])){
                 }, 3000);
               </script>";
           }
-      
+          unset($Id);
   }
 
 

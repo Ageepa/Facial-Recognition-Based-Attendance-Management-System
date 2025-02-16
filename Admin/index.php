@@ -143,8 +143,7 @@ $classArms = mysqli_num_rows($query1);
                       <div class="text-xs font-weight-bold text-uppercase mb-1">Total Class Arms</div>
                       <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo $classArms;?></div>
                       <div class="mt-2 mb-0 text-muted text-xs">
-                        <!-- <span class="text-success mr-2"><i class="fas fa-arrow-up"></i> 12%</span>
-                        <span>Since last years</span> -->
+                        
                       </div>
                     </div>
                     <div class="col-auto">
